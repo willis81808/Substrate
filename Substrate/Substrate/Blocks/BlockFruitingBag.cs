@@ -18,9 +18,9 @@ namespace Substrate.Blocks
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
-            return base.OnBlockInteractStart(world, byPlayer, blockSel) && (world.BlockAccessor
+            return world.BlockAccessor
                 .GetBlockEntity<BlockEntityFruitingBag>(blockSel.Position)?
-                .OnInteract(world, byPlayer, blockSel) ?? true);
+                .OnInteract(world, byPlayer, blockSel) ?? true;
         }
 
         public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection blockSel, IPlayer forPlayer)

@@ -1,6 +1,7 @@
 ﻿using Substrate.BlockEntities;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.GameContent;
 
 namespace Substrate.Blocks
 {
@@ -13,7 +14,7 @@ namespace Substrate.Blocks
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
-            return base.OnBlockInteractStart(world, byPlayer, blockSel) && (GetBlockEntity<BlockEntitySporePaper>(blockSel)?.OnInteract(byPlayer, blockSel) ?? true);
+            return GetBlockEntity<BlockEntitySporePaper>(blockSel)?.OnInteract(byPlayer, blockSel) ?? true;
         }
 
         public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection blockSel, IPlayer forPlayer)
