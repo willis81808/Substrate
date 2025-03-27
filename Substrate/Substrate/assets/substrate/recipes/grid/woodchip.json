@@ -1,0 +1,13 @@
+﻿{
+	ingredientPattern: "A	L",
+	ingredients: {
+		"A": { type: "item", code: "game:axe-*", isTool: true  },
+		"L": {
+			"type": "item",
+			"code": "game:firewood"
+		}
+	},
+	width: 1,
+	height: 2,
+	output: { type: "item", code: "woodchip", quantity: 8  }
+}

@@ -1,0 +1,112 @@
+﻿{
+  "code": "sporepaper",
+  "class": "BlockSporePaper",
+  "entityClass": "SporePaper",
+  "maxstacksize": 16,
+  "shape": { "base": "game:block/paper/lifted" },
+  "texture": { "base": "block/sporepaper-blank" },
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "materialDensity": 200,
+  "blockmaterial": "Cloth",
+  "lightAbsorption": 1,
+  "emitSideAo": {
+    "all": false
+  },
+  "resistance": 1,
+  "variantgroups": [
+    {
+      "code": "side",
+      "loadFromProperties": "abstract/horizontalorientation"
+    }
+  ],
+  "shapebytype": {
+    "*-north": {
+      "base": "game:block/paper/lifted",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "game:block/paper/lifted",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "game:block/paper/lifted",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "game:block/paper/lifted",
+      "rotateY": 90
+    }
+  },
+  "attributes": {
+    "displaycaseable": true,
+    "shelvable": true,
+    "sporecollectdays": 0.5
+  },
+  "sounds": {
+    "place": "game:block/cloth",
+    "break": "game:block/cloth",
+    "hit": "game:block/cloth",
+    "walk": "game:walk/cloth"
+  },
+  "collisionBox": {
+    "x1": 0,
+    "y1": 0,
+    "z1": 0,
+    "x2": 1,
+    "y2": 0.0625,
+    "z2": 1
+  },
+  "faceCullMode": "MergeMaterial",
+  "sideopaque": {
+    "all": false
+  },
+  "combustibleProps": {
+    "burnTemperature": 150,
+    "burnDuration": 2
+  },
+  "selectionBoxes": [
+    {
+      "x1": 0.1875,
+      "y1": 0,
+      "z1": 0.1875,
+      "x2": 0.4375,
+      "y2": 0.25,
+      "z2": 0.4375
+    },
+    {
+      "x1": 0.5625,
+      "y1": 0,
+      "z1": 0.1875,
+      "x2": 0.8125,
+      "y2": 0.25,
+      "z2": 0.4375
+    },
+    {
+      "x1": 0.1875,
+      "y1": 0,
+      "z1": 0.5625,
+      "x2": 0.4375,
+      "y2": 0.25,
+      "z2": 0.8125
+    },
+    {
+      "x1": 0.5625,
+      "y1": 0,
+      "z1": 0.5625,
+      "x2": 0.8125,
+      "y2": 0.25,
+      "z2": 0.8125
+    },
+    {
+      "x1": 0,
+      "y1": 0,
+      "z1": 0,
+      "x2": 1,
+      "y2": 0.0625,
+      "z2": 1
+    }
+  ],
+  "creativeinventory": {
+    "general": [ "*-north" ]
+  }
+}

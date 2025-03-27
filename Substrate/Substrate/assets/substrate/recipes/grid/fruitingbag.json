@@ -1,0 +1,26 @@
+﻿{
+  "ingredientPattern": "FHF,FGF,FFF",
+  "ingredients": {
+    "F": {
+      "type": "item",
+      "code": "game:flaxtwine"
+    },
+    "H": {
+      "type": "item",
+      "code": "game:drygrass",
+      "quantity": 5
+    },
+    "G": {
+      "type": "item",
+      "code": "game:grain-*",
+      "quantity": 5
+    }
+  },
+  "width": 3,
+  "height": 3,
+  "output": {
+    "type": "block",
+    "code": "fruitingbag",
+    "quantity": 1
+  }
+}

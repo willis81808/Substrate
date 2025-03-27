@@ -1,0 +1,49 @@
+﻿{
+  "code": "fruitingbag",
+  "class": "BlockFruitingBag",
+  "entityClass": "FruitingBag",
+  "creativeinventory": { "general": [ "*" ] },
+  "shape": { "base": "block/fruitingbag" },
+  "texture": { "base": "game:block/cloth/burlap/sides" },
+  "attributes": {
+    "maxfert": 1000,
+    "fertconsumerate": {
+      "avg": 10,
+      "var": 10,
+      "dist": "GAUSSIAN"
+    },
+    "growincrement": {
+      "avg": 2.16,
+      "var": 0.5,
+      "dist": "GAUSSIAN"
+    },
+    "colonizeincrement": {
+      "avg": 36,
+      "var": 12,
+      "dist": "GAUSSIAN"
+    },
+    "rotDrop": {
+      "avg": 6,
+      "var": 3,
+      "dist": "GAUSSIAN"
+    },
+    "compostDrop": {
+      "avg": 1,
+      "var": 0
+    },
+    "growchance": 0.1
+  },
+  "faceCullMode": "MergeMaterial",
+  "sideopaque": {
+    "all": false
+  },
+  "materialDensity": 200,
+  "blockmaterial": "Cloth",
+  "resistance": 1,
+  "sounds": {
+    "place": "game:block/cloth",
+    "break": "game:block/cloth",
+    "hit": "game:block/cloth",
+    "walk": "game:walk/cloth"
+  }
+}

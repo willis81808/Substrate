@@ -1,0 +1,22 @@
+﻿{
+  "ingredientPattern": "A\tL",
+  "ingredients": {
+    "A": {
+      "type": "item",
+      "code": "game:knife-*",
+      "isTool": true
+    },
+    "L": {
+      "type": "block",
+      "code": "sporepaperprinted-*-north",
+      "name": "mushroom"
+    }
+  },
+  "width": 1,
+  "height": 2,
+  "output": {
+    "type": "item",
+    "code": "sporeprint-{mushroom}",
+    "quantity": 4
+  }
+}

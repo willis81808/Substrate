@@ -1,0 +1,60 @@
+﻿{
+  "code": "wetsporepaper",
+  "maxstacksize": 16,
+  "shape": { "base": "game:block/paper/lifted" },
+  "texture": { "base": "item/wetsporepaper" },
+  "faceCullMode": "MergeMaterial",
+  "sideopaque": {
+    "all": false
+  },
+  "guiTransform": {
+    "translation": {
+      "x": -3,
+      "y": -12,
+      "z": 0
+    },
+    "rotation": {
+      "x": -53,
+      "y": -28,
+      "z": 0
+    },
+    "origin": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  "groundTransform": {
+    "translation": {
+      "x": 0,
+      "y": 0.016,
+      "z": 0
+    },
+    "rotation": {
+      "x": 1,
+      "y": 0,
+      "z": 0
+    },
+    "origin": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": 2.16
+  },
+  "transitionableProps": [
+    {
+      "type": "Dry",
+      "freshHours": { "avg": 0 },
+      "transitionHours": { "avg": 8 },
+      "transitionedStack": {
+        "type": "block",
+        "code": "sporepaper-north"
+      },
+      "transitionRatio": 1
+    }
+  ],
+  "creativeinventory": {
+    "general": [ "*" ]
+  }
+}

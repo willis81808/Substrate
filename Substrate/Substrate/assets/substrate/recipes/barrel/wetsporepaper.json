@@ -1,0 +1,22 @@
+﻿{
+  "code": "wetsporepaper",
+  "sealHours": 18,
+  "ingredients": [
+    {
+      "type": "item",
+      "code": "game:alcoholportion",
+      "litres": 0.1,
+      "consumeLitres": 0.1
+    },
+    {
+      "type": "item",
+      "code": "game:paper-parchment",
+      "quantity": 1
+    }
+  ],
+  "output": {
+    "type": "item",
+    "code": "wetsporepaper",
+    "stackSize": 1
+  }
+}
