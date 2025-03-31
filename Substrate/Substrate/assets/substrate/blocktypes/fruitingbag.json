@@ -5,11 +5,14 @@
   "creativeinventory": { "general": [ "*" ] },
   "shape": { "base": "block/fruitingbag" },
   "texture": { "base": "game:block/cloth/burlap/sides" },
+  "behaviors": [
+    { "name": "BehaviorMushroomGrower" }
+  ],
   "attributes": {
     "maxfert": 1000,
     "fertconsumerate": {
-      "avg": 10,
-      "var": 10,
+      "avg": 13,
+      "var": 5,
       "dist": "GAUSSIAN"
     },
     "growincrement": {
@@ -31,15 +34,38 @@
       "avg": 1,
       "var": 0
     },
-    "growchance": 0.1
+    "growchance": 0.1,
+    "acceptablemushrooms": [
+      "beardedtooth",
+      "chickenofthewoods",
+      "dryadsaddle",
+      "pinkoyster",
+      "tinderhoof",
+      "whiteoyster",
+      "reishi",
+      "funeralbell",
+      "deerear",
+      "livermushroom",
+      "pinkbonnet",
+      "shiitake"
+    ],
+    "refundItem": "game:flaxtwine",
+    "refundAmount": {
+      "avg": 5,
+      "var": 2,
+      "dist": "GAUSSIAN"
+    }
   },
   "faceCullMode": "MergeMaterial",
   "sideopaque": {
     "all": false
   },
+  "sidesolid": {
+    "up": false
+  },
   "materialDensity": 200,
   "blockmaterial": "Cloth",
-  "resistance": 1,
+  "resistance": 2,
   "sounds": {
     "place": "game:block/cloth",
     "break": "game:block/cloth",

@@ -1,0 +1,122 @@
+﻿{
+  "code": "growbed",
+  "class": "BlockGrowBed",
+  "entityClass": "FruitingBag",
+  "behaviors": [
+    { "name": "UnstableFalling" },
+    { "name": "BehaviorMushroomGrower" },
+    {
+      "name": "Multiblock",
+      "properties": {
+        "sizex": 2,
+        "sizey": 1,
+        "sizez": 2,
+        "cposition": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    }
+  ],
+  "attributes": {
+    "maxfert": 1000,
+    "fertconsumerate": {
+      "avg": 13,
+      "var": 5,
+      "dist": "GAUSSIAN"
+    },
+    "growincrement": {
+      "avg": 2.16,
+      "var": 0.5,
+      "dist": "GAUSSIAN"
+    },
+    "colonizeincrement": {
+      "avg": 36,
+      "var": 12,
+      "dist": "GAUSSIAN"
+    },
+    "rotDrop": {
+      "avg": 6,
+      "var": 3,
+      "dist": "GAUSSIAN"
+    },
+    "compostDrop": {
+      "avg": 1,
+      "var": 0
+    },
+    "growchance": 0.1,
+    "acceptablemushrooms": [
+      "flyagaric",
+      "fieldmushroom",
+      "almondmushroom",
+      "bitterbolete",
+      "blacktrumpet",
+      "chanterelle",
+      "commonmorel",
+      "deathcap",
+      "devilstooth",
+      "devilbolete",
+      "earthball",
+      "elfinsaddle",
+      "golddropmilkcap",
+      "greencrackedrussula",
+      "indigomilkcap",
+      "jackolantern",
+      "kingbolete",
+      "lobster",
+      "orangeoakbolete",
+      "paddystraw",
+      "puffball",
+      "redwinecap",
+      "saffronmilkcap",
+      "violetwebcap",
+      "witchhat"
+    ],
+    "refundItem": "game:plank-oak",
+    "refundAmount": {
+      "avg": 4,
+      "var": 1,
+      "dist": "GAUSSIAN"
+    }
+  },
+  "creativeinventory": {
+    "general": [ "*" ]
+  },
+  "shape": { "base": "block/growbed" },
+  "faceCullMode": "MergeMaterial",
+  "sideopaque": {
+    "up": true,
+    "down": false,
+    "north": false,
+    "south": false,
+    "east": false,
+    "west": false
+  },
+  "sidesolid": {
+    "all": false
+  },
+  "materialDensity": 400,
+  "blockmaterial": "Wood",
+  "resistance": 3,
+  "lightAbsorption": 1,
+  "sounds": {
+    "place": "game:block/planks",
+    "hit": "game:block/planks",
+    "break": "game:block/planks",
+    "walk": "game:walk/grass"
+  },
+  "guiTransform": {
+    "translation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "origin": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "scale": 0.5
+  }
+}

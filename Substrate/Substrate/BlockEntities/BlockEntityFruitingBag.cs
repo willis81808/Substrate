@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
 using System.Text.RegularExpressions;
+using Substrate.Blocks;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
@@ -11,6 +14,7 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.GameContent.Mechanics;
 using Vintagestory.API.Client;
 using Vintagestory.API.Config;
+using Vintagestory.GameContent;
 
 namespace Substrate.BlockEntities
 {
@@ -18,12 +22,17 @@ namespace Substrate.BlockEntities
     {
         internal bool Inoculated => !string.IsNullOrWhiteSpace(_inoculatedMushroom);
         internal bool Colonizing => Inoculated && _colonizeDuration > 0 && _elapsedColonizeHours < _colonizeDuration;
-        internal float MaxFertility => Block.Attributes["maxfert"].AsFloat();
-        internal float GrowChance => Block.Attributes["growchance"].AsFloat();
+        internal float MaxFertility => Block.Attributes["maxfert"]?.AsFloat() ?? 1000;
+        internal float GrowChance => Block.Attributes["growchance"]?.AsFloat() ?? 0.1f;
+        internal string RefundItem => _refundItem ?? Block.Attributes["refundItem"].AsString();
+
+        internal string[] AcceptableMushrooms =>
+            Block.Attributes["acceptablemushrooms"].AsArray<string>() ?? Array.Empty<string>();
 
         internal double ElapsedColonizeHours => _elapsedColonizeHours;
         internal double ColonizeDuration => _colonizeDuration;
 
+        private string _refundItem = null;
         private double _startGrowingHours = 0;
         private double _elapsedColonizeHours = 0;
         private double _nextGrowHours = 0;
@@ -59,6 +68,7 @@ namespace Substrate.BlockEntities
         {
             base.ToTreeAttributes(tree);
             tree.SetString(nameof(_inoculatedMushroom).ToLower(), _inoculatedMushroom);
+            tree.SetString(nameof(_refundItem).ToLower(), _refundItem);
             tree.SetFloat(nameof(_fertility).ToLower(), _fertility);
             tree.SetDouble(nameof(_startGrowingHours).ToLower(), _startGrowingHours);
             tree.SetDouble(nameof(_elapsedColonizeHours).ToLower(), _elapsedColonizeHours);
@@ -70,11 +80,54 @@ namespace Substrate.BlockEntities
         {
             base.FromTreeAttributes(tree, worldAccessForResolve);
             _inoculatedMushroom = tree.GetString(nameof(_inoculatedMushroom).ToLower());
+            _refundItem = tree.GetString(nameof(_refundItem).ToLower());
             _fertility = tree.GetFloat(nameof(_fertility).ToLower(), MaxFertility);
             _startGrowingHours = tree.GetDouble(nameof(_startGrowingHours).ToLower());
             _elapsedColonizeHours = tree.GetDouble(nameof(_elapsedColonizeHours).ToLower());
             _colonizeDuration = tree.GetDouble(nameof(_colonizeDuration).ToLower());
             _nextGrowHours = tree.GetDouble(nameof(_nextGrowHours).ToLower());
+        }
+
+        private int GetOpenFaceCount() => GetGrowFaces().Count();
+
+        private struct GrowFace
+        {
+            public BlockFacing Facing;
+            public Block Block;
+            public BlockPos Position;
+        }
+
+        private IEnumerable<GrowFace> GetGrowFaces()
+        {
+            switch (Block)
+            {
+                case BlockGrowBed:
+                {
+                    var positions = new []
+                    {
+                        Pos.UpCopy(),
+                        Pos.UpCopy().East(),
+                        Pos.UpCopy().South(),
+                        Pos.UpCopy().East().South()
+                    };
+                    return positions.Select(pos => new GrowFace
+                    {
+                        Facing = BlockFacing.UP,
+                        Block = Api.World.BlockAccessor.GetBlock(pos),
+                        Position = pos
+                    }).Where(b => b.Block.IsAir());
+                }
+                case BlockFruitingBag:
+                    return BlockFacing.HORIZONTALS
+                        .Select(facing => new GrowFace
+                        {
+                            Facing = facing,
+                            Block = Api.World.BlockAccessor.GetBlockOnSide(Pos, facing),
+                            Position = Pos.Copy().Offset(facing),
+                        }).Where(b => b.Block.IsAir());
+                default:
+                    return Array.Empty<GrowFace>();
+            }
         }
 
         private void Tick(float deltaTime)
@@ -110,14 +163,7 @@ namespace Substrate.BlockEntities
 
                 Fertility = Math.Max(0, Fertility - NextFertilityDrain());
 
-                var openFaces = BlockFacing.HORIZONTALS
-                    .Select(facing => new
-                    {
-                        Facing = facing,
-                        Block = Api.World.BlockAccessor.GetBlockOnSide(Pos, facing),
-                        Position = Pos.Copy().Offset(facing),
-                    })
-                    .Where(b => b.Block.IsAir())
+                var openFaces = GetGrowFaces()
                     .OrderBy(_ => Api.World.Rand.NextDouble())
                     .ToList();
 
@@ -131,10 +177,6 @@ namespace Substrate.BlockEntities
                         Api.World.BlockAccessor.MarkBlockDirty(selection.Position);
                         Api.World.BlockAccessor.TriggerNeighbourBlockUpdate(selection.Position);
                     }
-                }
-                else
-                {
-                    Api.Logger.Debug("No open faces around mushroom bag!");
                 }
             }
 
@@ -150,7 +192,24 @@ namespace Substrate.BlockEntities
 
             if (!slot.Itemstack.Collectible.Code.PathStartsWith("sporeprint")) return false;
 
-            _inoculatedMushroom = slot.Itemstack.Collectible.Variant["mushroom"];
+            var mushroomVariant = slot.Itemstack.Collectible.Variant["mushroom"];
+            if (!AcceptableMushrooms.Contains(mushroomVariant))
+            {
+                if (Api is ICoreClientAPI capi)
+                {
+                    var requiredBlockKey = Block is BlockFruitingBag ? "block-growbed" : "block-fruitingbag";
+                    var mushroomName = Lang.Get($"substrate:mushroom-{mushroomVariant}");
+                    var requiredBlockName = Lang.Get($"substrate:{requiredBlockKey}");
+                    capi.TriggerIngameError(
+                        this, 
+                        "incorrect-growth-medium", 
+                        Lang.Get("substrate:notice-cannot-grow-mushroom-with-block", mushroomName, requiredBlockName)
+                    );
+                }
+                return false;
+            }
+
+            _inoculatedMushroom = mushroomVariant;
             _colonizeDuration = NextColonizeIncrement();
 
             slot.TakeOut(1);
@@ -171,6 +230,7 @@ namespace Substrate.BlockEntities
             _elapsedColonizeHours = byItemStack.Attributes.GetDouble("elapsedColonizeHours");
             _colonizeDuration = byItemStack.Attributes.GetDouble("colonizeDuration");
             _inoculatedMushroom = byItemStack.Attributes.GetString("sporetype") ?? string.Empty;
+            _refundItem = byItemStack.Attributes.GetString("refundItem");
 
             MarkDirty(true);
         }
@@ -180,20 +240,27 @@ namespace Substrate.BlockEntities
             base.GetBlockInfo(forPlayer, dsc);
 
             if (Fertility > 0)
-                dsc.AppendLine(Lang.Get("substrate:fruitingbag-remaining-fertility", Fertility / MaxFertility * 100));
+            {
+                if (Inoculated)
+                {
+                    var mushroomName = Lang.Get($"substrate:mushroom-{InoculatedMushroom}");
+                    dsc.AppendLine(Lang.Get("substrate:fruitingbag-inoculated-with", mushroomName));
+                }
 
-            if (!Inoculated) return;
+                dsc.AppendLine(Lang.Get("substrate:fruitingbag-remaining-fertility", Fertility / MaxFertility * 100));
+                if (GetOpenFaceCount() == 0)
+                    dsc.AppendLine(Lang.Get("substrate:notice-no-available-grow-spots"));
+            }
+            else
+            {
+                dsc.AppendLine(Lang.Get("substrate:notice-moldy"));
+            }
 
             if (Colonizing)
             {
                 var remainingHours = ColonizeDuration - ElapsedColonizeHours;
                 dsc.AppendLine(Lang.Get("substrate:fruitingbag-colonizing-hours", remainingHours));
             }
-            //else if (Fertility > 0)
-            //{
-            //    var nextGrowAttempt = _nextGrowHours - Api.World.Calendar.ElapsedHours;
-            //    dsc.AppendLine($"Growing again in {nextGrowAttempt:F2} hour(s)");
-            //}
         }
 
         public WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
@@ -204,7 +271,7 @@ namespace Substrate.BlockEntities
             {
                 new WorldInteraction
                 {
-                    ActionLangCode = "substrate:fruitingbag-insert-substrate",
+                    ActionLangCode = "substrate:fruitingbag-insert-sporeprint",
                     HotKeyCode = "shift",
                     MouseButton = EnumMouseButton.Right,
                     Itemstacks = SporePaperStacks(Api)
@@ -214,8 +281,8 @@ namespace Substrate.BlockEntities
 
         internal static Block GetMushroomBlock(IWorldAccessor world, string mushroom, BlockFacing direction)
         {
-            var asset = new AssetLocation($"game:mushroom-{mushroom}-normal-{direction.Code}");
-            return world.GetBlock(asset);
+            return world.GetBlock(new AssetLocation($"game:mushroom-{mushroom}-normal-{direction.Code}")) ??
+                   world.GetBlock(new AssetLocation($"game:mushroom-{mushroom}-normal"));
         }
 
         public static string ExtractMushroomName(string code)

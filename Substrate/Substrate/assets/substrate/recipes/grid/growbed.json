@@ -1,29 +1,35 @@
 ﻿{
-  "ingredientPattern": "FHF,FGF,FFF",
+  "ingredientPattern": "HDG,PPP,P P",
   "ingredients": {
-    "F": {
-      "type": "item",
-      "code": "game:flaxtwine"
-    },
     "H": {
       "type": "item",
       "code": "game:drygrass",
       "quantity": 5
     },
+    "D": {
+      "type": "block",
+      "code": "game:soil-*",
+      "quantity": 4
+    },
     "G": {
       "type": "item",
       "code": "game:grain-*",
       "quantity": 5
+    },
+    "P": {
+      "type": "item",
+      "code": "game:plank-*",
+      "name": "wood"
     }
   },
   "width": 3,
   "height": 3,
   "output": {
     "type": "block",
-    "code": "fruitingbag",
+    "code": "growbed",
     "quantity": 1,
     "attributes": {
-      "refundItem": "game:flaxtwine"
+      "refundItem": "game:plank-{wood}"
     }
   }
 }

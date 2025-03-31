@@ -12,8 +12,7 @@ using Vintagestory.GameContent;
 
 namespace Substrate.Blocks
 {
-    public class BlockFruitingBag : Block
+    public class BlockGrowBed : Block
     {
-
     }
 }

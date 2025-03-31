@@ -53,6 +53,7 @@
   <Content Include="assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
+  <None Remove="assets\substrate\blocktypes\growbed.json" />
   <None Remove="assets\substrate\blocktypes\sporepaperprinted.json" />
   <None Remove="assets\substrate\blocktypes\wetsporepaper.json" />
   <None Remove="assets\substrate\itemtypes\sporeprint.json" />
@@ -63,6 +64,7 @@
   <None Remove="assets\substrate\itemtypes\woodchip.json" />
   <None Remove="assets\substrate\recipes\barrel\wetsporepaper.json" />
   <None Remove="assets\substrate\recipes\grid\fruitingbag.json" />
+  <None Remove="assets\substrate\recipes\grid\growbed.json" />
   <None Remove="assets\substrate\recipes\grid\sporeprint.json" />
   <None Remove="assets\substrate\recipes\grid\woodchip.json" />
   <Content Include="modinfo.json">

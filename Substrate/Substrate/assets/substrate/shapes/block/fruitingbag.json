@@ -9,7 +9,7 @@
 	"textureSizes": {
 	},
 	"textures": {
-		"sides": "block/cloth/burlap/sides"
+		"sides": "game:block/cloth/burlap/sides"
 	},
 	"elements": [
 		{
