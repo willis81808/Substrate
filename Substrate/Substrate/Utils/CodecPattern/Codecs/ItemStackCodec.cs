@@ -34,11 +34,11 @@ namespace Substrate.Utils.CodecPattern.Codecs
                     }
                 }
                 var mapping = new Dictionary<int, AssetLocation> { { id, code } };
-                if (stack.FixMapping(mapping, mapping, SubstrateModSystem.Api.World))
-                {
-                    stack.ResolveBlockOrItem(SubstrateModSystem.Api.World);
-                    return stack;
-                }
+                //if (stack.FixMapping(mapping, mapping, SubstrateModSystem.Api.World))
+                //{
+                //    stack.ResolveBlockOrItem(SubstrateModSystem.Api.World);
+                //    return stack;
+                //}
                 return null;
             });
     }

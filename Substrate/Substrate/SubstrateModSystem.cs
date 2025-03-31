@@ -22,14 +22,11 @@ namespace Substrate
     public class SubstrateModSystem : ModSystem
     {
         internal static ILogger Logger { get; private set; }
-        internal static ICoreAPI Api { get; private set; }
 
         // Called on server and client
         // Useful for registering block/entity classes on both sides
         public override void Start(ICoreAPI api)
         {
-            Api = api;
-
             api.RegisterBlockClass("BlockFruitingBag", typeof(BlockFruitingBag));
             api.RegisterBlockClass("BlockGrowBed", typeof(BlockGrowBed));
             api.RegisterBlockEntityClass("FruitingBag", typeof(BlockEntityFruitingBag));
@@ -66,21 +63,6 @@ namespace Substrate
         public override void StartClientSide(ICoreClientAPI api)
         {
             Logger = Mod.Logger;
-
-            ItemStack rot = api.World.Collectibles
-                .Where(c => c.LastCodePart() == "rot")
-                .SelectMany(c => c.GetHandBookStacks(api))
-                .First();
-
-            rot = rot.Clone();
-            rot.Attributes.SetString("string", "example string");
-            rot.Attributes.SetInt("number", 69);
-            rot.Attributes.GetString("string");
-            rot.Attributes.SetItemstack("compost", Collectibles.Compost(api).GetHandBookStacks(api).First());
-            rot.StackSize = 5;
-
-            var json = ItemStackCodec.ITEM_STACK.ToJson(rot);
-            var stack = ItemStackCodec.ITEM_STACK.FromJson(json);
         }
     }
 }
