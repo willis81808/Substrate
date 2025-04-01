@@ -14,7 +14,7 @@ namespace Substrate.Utils
             ObjectCacheUtil.GetOrCreate(
                 api,
                 "compostCollectible",
-                () => api.World.Collectibles.First(c => c.LastCodePart() == "compost")
+                () => api.World.GetItem(AssetLocation.Create("game:compost"))
             );
 
 
@@ -22,7 +22,7 @@ namespace Substrate.Utils
             ObjectCacheUtil.GetOrCreate(
                 api, 
                 "rotCollectable", 
-                () => api.World.Collectibles.First(c => c.LastCodePart() == "rot")
+                () => api.World.GetItem(AssetLocation.Create("game:rot"))
             );
     }
 }
